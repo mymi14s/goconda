@@ -1,0 +1,17 @@
+docker run -d \
+  --name goconda \
+  -p 8080:8080 \
+  -e APP_ENV=prod \
+  -e ADMIN_EMAIL=admin@example.com \
+  -e ADMIN_PASSWORD=SuperSecretPass123 \
+  -e DB_DRIVER=mysql \
+  -e DB_DSN=${DB_DSN} \
+  -e SMTP_HOST=smtp.sendgrid.net \
+  -e SMTP_PORT=587 \
+  -e SMTP_USERNAME=apikey \
+  -e SMTP_PASSWORD=SG.xxxxxx \
+  -e SMTP_FROM=no-reply@yourdomain.com \
+  goconda
+
+
+DB_DSN =  user:password@tcp(dbhost:3306)/goconda?charset=utf8&parseTime=True&loc=Local" 

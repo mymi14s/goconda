@@ -1,0 +1,74 @@
+# ---> General
+.git
+.gitignore
+.dockerignore
+README.md
+LICENSE
+
+# ---> Go
+# Binaries and build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.o
+*.a
+
+# Coverage / profiling files
+*.cover
+*.prof
+coverage.*
+
+# Go workspace files
+go.work
+go.work.sum
+
+# Go build cache
+**/__debug_bin
+
+# ---> Beego
+# Logs and runtime
+logs/
+log/
+*.log
+runtime/
+tmp/
+cache/
+*.pid
+
+# Beego local config (keep production config outside image)
+app.conf
+
+# Upload directories (don’t ship local test uploads)
+uploads/
+upload/
+static/upload/
+
+# ---> Vendor / Dependencies
+vendor/
+node_modules/
+
+# ---> OS and Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+*~
+
+# ---> IDEs
+.vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# ---> Misc
+npm-debug.log
+yarn-error.log
+
+.session
+*.db
