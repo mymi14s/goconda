@@ -39,7 +39,6 @@ func (c *FrontendController) GetInfo() {
 
 	ss := models.SiteSetting{}
 	data, _ := ss.Get()
-	fmt.Println(&data)
 	c.JSONOK(&data)
 }
 
@@ -57,7 +56,11 @@ func (c *FrontendController) ContactForm() {
 		return
 	}
 
-	if err := mailer.SendEmail(form.Message, []string{form.Email}, form.Subject); err != nil {
+	// fetch email from settings
+	ss := models.SiteSetting{}
+	data, _ := ss.Get()
+
+	if err := mailer.SendEmail(form.Message, []string{data.Email}, form.Subject); err != nil {
 		c.JSONError(400, err.Error())
 	}
 	c.JSONOK(map[string]any{"status": true})
