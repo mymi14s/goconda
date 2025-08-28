@@ -1,0 +1,1 @@
+export const logo = "/static/admin/assets/logo-long.png"

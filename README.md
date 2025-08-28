@@ -1,3 +1,53 @@
+# Goconda
+
+Production-ready Go (Beego) + Vue.js application. This README reflects the latest cleanup: commented-out code removed, clear comments added, and MIT license included.
+
+## Tech stack
+
+- **Backend:** Go 
+- **Frontend:** Vue.js
+- **Node package manager:** `npm`/`yarn`
+
+## Latest functionality
+
+### Frontend routes (detected from Vue router)
+
+- `/` — `Home`
+- `/auth",redirect:"/auth/404` — `Auth`
+- `/dashboard` — `Dashboard`
+- `404` — `Page404`
+- `500` — `Page500`
+- `login` — `Login`
+- `register` — `Register`
+
+## Getting started
+
+### Backend (Go/Beego)
+```bash
+cd server  # if your backend lives here
+go mod tidy
+go run main.go
+```
+
+### Frontend (Vue)
+```bash
+cd frontend  # if your frontend lives here
+npm install
+npm run dev
+```
+
+## Production
+
+- Cleaned of commented-out code blocks.
+- Human, succinct doc-comments for functions and modules.
+- Imports left untouched.
+- MIT License included.
+- Recommended: enable logging/metrics, CI/CD, and environment configuration via `.env`.
+
+---
+
+## Previous README (kept for reference)
+
 # goconda — Beego v2.3.8 boilerplate (Go 1.25)
 
 A reusable, extendible boilerplate for building web apps with Beego v2.3.8 using Go 1.25.0.
@@ -167,3 +217,18 @@ password = changeme
 - `POST /api/v1/auth/change-email` (password, new_email) — requires auth, superuser can bypass password check
 
 Superusers bypass email verification automatically. The initial admin password is set **only once** on first creation; later you can change it via `change-password`.
+
+
+
+<!-- openssl req -x509 -newkey rsa:2048 -sha256 -days 365 -nodes \
+  -keyout key.pem -out cert.pem \
+  -subj "/CN=localhost" \
+  -addext "subjectAltName=DNS:localhost,IP:127.0.0.1" -->
+
+<!-- # If you use Homebrew (recommended)
+brew install mkcert nss   # nss helps Firefox trust the CA
+
+# Create and trust a local Certificate Authority in your Keychain
+mkcert -install
+cd backend
+mkcert localhost 127.0.0.1 ::1 -->

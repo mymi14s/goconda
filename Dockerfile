@@ -19,7 +19,7 @@ FROM gcr.io/distroless/base-debian12
 WORKDIR /app
 
 # Copy binary only
-COPY --from=builder /app/goconda /app/goconda
+COPY --from=builder /app /app
 COPY backend/conf/app.prod.conf /app/conf/app.prod.conf
 
 # Expose port

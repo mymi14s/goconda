@@ -1,94 +1,33 @@
-# ---> Go
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+# Node/Vue frontend
+/node_modules
+/dist
+/*.local
+/.env.local
+/.env.*.local
 
-# Test binary, build outputs
-*.test
-*.out
-
-# Go coverage tools
-*.cover
-*.prof
-coverage.*
-
-# Compiled object files, caches
-*.o
-*.a
-*.lo
-*.la
-*.obj
-*.gcov
-*.gcda
-*.gcno
-*.profraw
-*.profdata
-
-# Go module/vendor
-/vendor/
-/Godeps/
-/go.sum
-
-# Go workspace file
-go.work
-go.work.sum
-
-# Go build cache and IDE project data
+# Go backend
+/bin
+/tmp
+/logs
+/coverage
 *.log
-*.tmp
-*.swp
-*.swo
 
-# OS-specific files
+# Dependency / build caches
+*.out
+*.exe
+*.test
+*.prof
+*.coverprofile
+
+# Go modules cache
+vendor/
+*.sessions
+backend/backend
+
+# OS / IDE files
 .DS_Store
 Thumbs.db
-
-# ---> Beego
-# Beego auto-generated files
-app.conf
-
-# Beego log and runtime files
-logs/
-log/
-*.log
-
-# Beego-generated tmp files
-runtime/
-tmp/
-cache/
-
-# Beego PID files
-*.pid
-
-# Beego upload directories (if not versioned)
-uploads/
-upload/
-static/upload/
-
-# ---> IDEs and Editors
-# VSCode
-.vscode/
-.history/
-*.code-workspace
-
-# JetBrains IDEs
-.idea/
-*.iml
-
-# Sublime
-*.sublime-project
-*.sublime-workspace
-
-# Backup and temp files
-*~
-*.bak
 *.swp
 *.swo
-
-# Node (if using Beego with frontend)
-node_modules/
-npm-debug.log
-yarn-error.log
+.idea/
+.vscode/
