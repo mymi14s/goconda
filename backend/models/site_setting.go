@@ -11,9 +11,10 @@ type SiteSetting struct {
 	Id        int64     `orm:"pk"`
 	Title     string    `orm:"size(128)"`
 	SiteName  string    `orm:"size(128)"`
-	Tagline   string    `orm:"size(256);null"`
 	BaseURL   string    `orm:"size(255);column(base_url)"`
 	Email     string    `orm:"size(128)"`
+	Tagline   string    `orm:"size(256);null"`
+	Header    string    `orm:"size(5000);null"`
 	UpdatedAt time.Time `orm:"auto_now;type(datetime)"`
 	Version   int       `orm:"version"`
 	Sentinel  string    `orm:"unique;size(16)"`

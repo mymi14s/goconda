@@ -414,6 +414,9 @@
               $("#title-span").text(site_link.toUpperCase())
               $("#meta-content").attr('content', response.data.Tagline)
               $(".site-name").text(site_link.toUpperCase())
+              if (response.data.Header){
+                $(response.data.Header).appendTo("head");
+              }
             }
             },
             error: function(xhr, status, error) {
