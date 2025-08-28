@@ -17,7 +17,7 @@ type Item struct {
 	UpdatedAt   time.Time    `orm:"auto_now;type(datetime)" json:"updated_at"`
 }
 
-func (i *Item) TableName() string { return "items" }
+func (i *Item) TableName() string { return "item" }
 
 func CreateItem(i *Item) error {
 	_, err := orm.NewOrm().Insert(i)

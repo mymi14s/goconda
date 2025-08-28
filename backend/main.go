@@ -8,6 +8,8 @@ import (
 
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/server/web"
+	"github.com/beego/beego/v2/server/web/filter/cors"
+
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
 
@@ -75,7 +77,10 @@ func bootstrapAdmin() error {
 }
 
 func main() {
+	// Enable sessions
 	web.BConfig.WebConfig.Session.SessionOn = true
+	web.BConfig.WebConfig.Session.SessionName = "bffsid"
+	web.BConfig.WebConfig.Session.SessionCookieLifeTime = 86400 // 1 day
 	mustLoadConfig()
 	setupSessionsAndStatic()
 
@@ -92,5 +97,17 @@ func main() {
 	port, _ := web.AppConfig.Int("httpport")
 	appname := web.AppConfig.DefaultString("appname", "goconda")
 	log.Printf("%s starting on :%d", appname, port)
+	web.InsertFilter("*", web.BeforeRouter, cors.Allow(&cors.Options{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length", "Content-Type"},
+		AllowCredentials: true, // if you need cookies/JWT via cookie
+		MaxAge:           600,
+	}))
+
+	web.BConfig.Listen.HTTPPort = port
+	web.SetStaticPath("/static", "static")
+
 	web.Run()
 }

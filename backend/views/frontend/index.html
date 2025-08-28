@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title id="title-span"></title>
+  <meta name="description" content="" id="meta-content"/>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg: #0a0f1e;
+      --card: #111936;
+      --primary: #6ee7ff;
+      --primary-2: #6c5ce7;
+      --accent: #00e5a8;
+      --muted: #97a3b6;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: radial-gradient(1200px 800px at 10% 10%, #13264a 0%, #0a0f1e 40%, #070b16 100%); color: #e7edfb; }
+
+    /* Animated gradient orbs */
+    .orb {
+      position: absolute; inset: auto; border-radius: 999px; filter: blur(50px); opacity: .4; pointer-events: none; mix-blend-mode: screen;
+    }
+    .orb.one { width: 480px; height: 480px; background: radial-gradient(circle at 30% 30%, var(--primary), transparent 60%); top: -120px; right: -80px; animation: float 18s ease-in-out infinite; }
+    .orb.two { width: 360px; height: 360px; background: radial-gradient(circle at 70% 70%, var(--accent), transparent 60%); bottom: -120px; left: -80px; animation: float 22s ease-in-out infinite reverse; }
+    .orb.three { width: 260px; height: 260px; background: radial-gradient(circle at 50% 50%, var(--primary-2), transparent 60%); top: 20%; left: 10%; animation: float 26s ease-in-out infinite; }
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0) scale(1); }
+      50% { transform: translateY(-20px) translateX(10px) scale(1.05); }
+      100% { transform: translateY(0) translateX(0) scale(1); }
+    }
+
+    /* Navbar */
+    .navbar { background: rgba(7, 11, 22, .6); backdrop-filter: blur(10px); }
+    .navbar .nav-link { color: #dbe7ff; }
+    .navbar .nav-link.active, .navbar .nav-link:hover { color: var(--primary); }
+
+    /* Hero */
+    .hero {
+      position: relative; padding: 8rem 0 6rem; overflow: hidden;
+      background: linear-gradient(180deg, rgba(12,18,34,.4), rgba(12,18,34,0));
+    }
+    .hero h1 span { background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+      border-radius: 1.25rem;
+    }
+
+    /* Cards */
+    .service-card { background: linear-gradient(180deg, rgba(255,255,255, .06), rgba(255,255,255, .02)); border: 1px solid rgba(255,255,255,.09); }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 12px 38px rgba(0,0,0,.45); }
+    .service-icon { font-size: 2rem; color: var(--primary); }
+
+    /* Section headings */
+    .section-title { letter-spacing: .02em; }
+    .section-title span { color: var(--primary); }
+
+    /* Tech tags */
+    .tag { background: rgba(108,92,231,.18); border: 1px solid rgba(108,92,231,.35); color: #e6e4ff; }
+    .tag.alt { background: rgba(0,229,168,.14); border-color: rgba(0,229,168,.35); color: #d7fff3; }
+
+    /* Reveal animation */
+    .reveal { opacity: 0; transform: translateY(14px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.in-view { opacity: 1; transform: none; }
+
+    /* Contact form */
+    .form-control, .form-select { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.15); color: #e9f0ff; }
+    .form-control::placeholder { color: #aeb9cc; }
+    .btn-gradient {
+      background: linear-gradient(90deg, var(--primary-2), var(--accent)); border: 0; color: #071022; font-weight: 700;
+      transition: transform .2s ease; box-shadow: 0 10px 28px rgba(108,92,231,.25);
+    }
+    .btn-gradient:hover { transform: translateY(-1px); }
+
+    footer { color: #a5b1c8; }
+
+    /* Accessibility */
+    .focus-ring:focus { outline: 3px dashed var(--primary); outline-offset: 3px; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+  <!-- Decorative orbs -->
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top border-bottom border-0">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#home" id="nav-bar-home">
+        
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="#stack">Tech Stack</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header id="home" class="hero">
+    <div class="container position-relative">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+          <h1 class="display-4 fw-extrabold mb-3 reveal">
+            Ship faster with <span>expert tech</span>
+          </h1>
+          <p class="lead text-opacity-75 text-light mb-4 reveal" style="max-width: 56ch;">
+            <span class="site-name"></span> delivers end‑to‑end engineering: software development, web & bare‑metal server management, database services, and cloud—powered by Python & Go.
+          </p>
+          <div class="d-flex gap-3 reveal">
+            <a href="#contact" class="btn btn-gradient btn-lg px-4 focus-ring">
+              <i class="bi bi-rocket-takeoff me-1"></i> Start a Project
+            </a>
+            <a href="#services" class="btn btn-outline-light btn-lg px-4 border-0 focus-ring" style="--bs-btn-hover-bg: rgba(255,255,255,.1);">
+              <i class="bi bi-grid me-1"></i> Our Services
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="glass p-4 reveal">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-diagram-3 fs-3 me-2 text-info"></i>
+              <h2 class="h4 m-0">Scalable by Design</h2>
+            </div>
+            <p class="mb-3 text-secondary">From mono‑repos to microservices, we design resilient systems with observability, CI/CD, and zero‑downtime deploys.</p>
+            <ul class="list-unstyled small text-secondary m-0">
+              <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> Infrastructure as Code & automated hardening</li>
+              <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i> High‑availability databases & backups</li>
+              <li><i class="bi bi-check2-circle text-success me-2"></i> 24/7 monitoring & incident response</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Services -->
+  <section id="services" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+        <h2 class="section-title h1 fw-bold">Services <span>we offer</span></h2>
+        <p class="text-secondary m-0">Focused, production‑ready solutions tailored to your business.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="service-card rounded-4 h-100 p-4">
+            <i class="bi bi-code-slash service-icon"></i>
+            <h3 class="h5 mt-3">Software Development</h3>
+            <p class="text-secondary">Backend, APIs, and full‑stack apps using Python & Go with clean architecture and tests.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="service-card rounded-4 h-100 p-4">
+            <i class="bi bi-hdd-stack service-icon"></i>
+            <h3 class="h5 mt-3">Web & Bare‑Metal Server Mgmt</h3>
+            <p class="text-secondary">Hardening, performance tuning, container orchestration, backups, and disaster recovery.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="service-card rounded-4 h-100 p-4">
+            <i class="bi bi-database-check service-icon"></i>
+            <h3 class="h5 mt-3">Database Services</h3>
+            <p class="text-secondary">Design, scaling, replication, & observability for PostgreSQL, MySQL, Redis, and more.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="service-card rounded-4 h-100 p-4">
+            <i class="bi bi-boxes service-icon"></i>
+            <h3 class="h5 mt-3">Django / Beego</h3>
+            <p class="text-secondary">Rapid, secure web apps with Django (Python) and Beego (Go), optimized for maintainability.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="service-card rounded-4 h-100 p-4">
+            <i class="bi bi-briefcase service-icon"></i>
+            <h3 class="h5 mt-3">Frappe / ERPNext</h3>
+            <p class="text-secondary">Implementation, customization, hosting, and integrations for ERPNext on Frappe.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="service-card rounded-4 h-100 p-4">
+            <i class="bi bi-cloud-arrow-up service-icon"></i>
+            <h3 class="h5 mt-3">AWS & Google Cloud</h3>
+            <p class="text-secondary">Well‑Architected cloud setups with cost controls, security baselines, and IaC.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section id="stack" class="py-5">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6">
+          <h2 class="section-title h1 fw-bold mb-3 reveal">Our <span>Tech Stack</span></h2>
+          <p class="text-secondary mb-4 reveal">Battle‑tested frameworks and platforms we use to deliver reliably.</p>
+          <div class="d-flex flex-wrap gap-2 reveal">
+            <span class="badge rounded-pill px-3 py-2 tag"><i class="bi bi-filetype-py me-1"></i> Python</span>
+            <span class="badge rounded-pill px-3 py-2 tag alt"><i class="bi bi-filetype-go me-1"></i> Go</span>
+            <span class="badge rounded-pill px-3 py-2 tag"><i class="bi bi-grid-1x2 me-1"></i> Django</span>
+            <span class="badge rounded-pill px-3 py-2 tag alt"><i class="bi bi-diagram-2 me-1"></i> Beego</span>
+            <span class="badge rounded-pill px-3 py-2 tag"><i class="bi bi-box-seam me-1"></i> Frappe / ERPNext</span>
+            <span class="badge rounded-pill px-3 py-2 tag alt"><i class="bi bi-cloud me-1"></i> AWS</span>
+            <span class="badge rounded-pill px-3 py-2 tag"><i class="bi bi-clouds me-1"></i> Google Cloud</span>
+            <span class="badge rounded-pill px-3 py-2 tag alt"><i class="bi bi-database me-1"></i> PostgreSQL</span>
+            <span class="badge rounded-pill px-3 py-2 tag"><i class="bi bi-boxes me-1"></i> Docker</span>
+            <span class="badge rounded-pill px-3 py-2 tag alt"><i class="bi bi-diagram-3 me-1"></i> Kubernetes</span>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="glass p-4 reveal">
+            <div class="row row-cols-2 g-3">
+              <div class="col">
+                <div class="p-3 rounded-4 border border-0 service-card h-100">
+                  <div class="small text-secondary mb-1">Language</div>
+                  <div class="fw-bold">Python, Go</div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="p-3 rounded-4 border border-0 service-card h-100">
+                  <div class="small text-secondary mb-1">Frameworks</div>
+                  <div class="fw-bold">Django, Beego, Frappe</div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="p-3 rounded-4 border border-0 service-card h-100">
+                  <div class="small text-secondary mb-1">Cloud</div>
+                  <div class="fw-bold">AWS, Google Cloud</div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="p-3 rounded-4 border border-0 service-card h-100">
+                  <div class="small text-secondary mb-1">Ops</div>
+                  <div class="fw-bold">K8s, Docker, IaC</div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3 small text-secondary">Plus CI/CD, monitoring, SSO, and security standards baked in.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5 reveal">
+        <h2 class="section-title h1 fw-bold">Contact <span>Us</span></h2>
+        <p class="text-secondary">Tell us about your project. We’ll get back to you shortly.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <form id="contactForm" class="glass p-4 rounded-4">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Jane Doe" required />
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="you@company.com" required />
+              </div>
+              <div class="col-12">
+                <label for="subject" class="form-label">Subject</label>
+                <input type="text" class="form-control" id="subject" name="subject" placeholder="How can we help?" required />
+              </div>
+              <div class="col-12">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" id="message" name="message" rows="5" placeholder="Project details, timelines, budgets…" required></textarea>
+              </div>
+              <div class="col-12 form-check my-2">
+                <input class="form-check-input" type="checkbox" value="" id="consent" required />
+                <label class="form-check-label" for="consent">I agree to be contacted about my inquiry.</label>
+              </div>
+              <div class="col-12 d-grid">
+                <button type="submit" class="btn btn-gradient btn-lg"><i class="bi bi-send me-1"></i> Send Message</button>
+              </div>
+            </div>
+          </form>
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="toast" class="toast align-items-center text-bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="d-flex">
+                <div class="toast-body">
+                  Thanks! Your message has been sent.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="glass p-4 rounded-4 h-100">
+            <h3 class="h5 mb-3"><i class="bi bi-telephone-outbound me-2"></i>Reach us</h3>
+            <p class="text-secondary">Prefer email? Send a message and we’ll respond ASAP.</p>
+            <ul class="list-unstyled small m-0">
+              <li class="mb-2"><i class="bi bi-envelope-open me-2 text-info"></i> <a href="#" id="email-link">Email Us</a></li>
+              <li class="mb-2"><i class="bi bi-geo-alt me-2 text-info"></i> Worldwide • Remote‑first</li>
+              <!-- <li><i class="bi bi-clock-history me-2 text-info"></i> Mon–Fri, 09:00–18:00</li> -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-4 border-top border-0">
+    <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between">
+      <p class="m-0 small">© <span id="year"></span> <span class="site-name"></span>. All rights reserved.</p>
+      <div class="d-flex gap-3">
+        <a class="link-light link-opacity-75-hover" href="#services">Services</a>
+        <a class="link-light link-opacity-75-hover" href="#stack">Stack</a>
+        <a class="link-light link-opacity-75-hover" href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Set year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    reveals.forEach(el => io.observe(el));
+
+    // Contact form: open mail client via mailto and show toast
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      $.ajax({
+          url: "/frontend/api/contact-form",
+          type: "POST",
+          contentType: "application/json",
+          dataType: "json",  
+          data: JSON.stringify({
+            Email: email,
+            Subject: subject,
+            Message: 'Name: ' + name + '<br>\nEmail: ' + email + '<br>\n\n' + message
+          }),
+          success: function(response) {
+          if(response.data){
+            if (response.data.status) {
+              const toastEl = document.getElementById('toast');
+              const toast = new bootstrap.Toast(toastEl, { delay: 3800 });
+              toast.show();
+              contactForm.reset();
+              document.getElementById('consent').checked = false;
+            }    
+          }
+          },
+          error: function(xhr, status, error) {
+          console.error("Error:", error);
+          alert(error)
+          }
+      });
+
+    });
+
+
+    (function() {
+        $.ajax({
+            url: "/frontend/api/get-info",
+            type: "GET",
+            dataType: "json",  // 
+            success: function(response) {
+            if(response.data){
+              const email = response.data.Email.split('@');
+              const user = email[0];
+              const domain = email[1];
+              const el = document.getElementById("email-link");
+              if (el) {
+                  el.href = "mailto:" + user + "@" + domain;
+                  el.textContent = user + "@" + domain;
+              }
+              // set links and names
+              let site_link = response.data.BaseURL;
+              let site_name_split = response.data.BaseURL.split('.')
+              $("#nav-bar-home").html(`<i class="bi bi-cpu me-2"></i>${(site_name_split[0].charAt(0).toUpperCase() + site_name_split[0].slice(1))}<span class="text-info">.${site_name_split[1]}</span>`)
+              $("#title-span").text(site_link.toUpperCase())
+              $("#meta-content").attr('content', response.data.Tagline)
+              $(".site-name").text(site_link.toUpperCase())
+            }
+            },
+            error: function(xhr, status, error) {
+            console.error("Error:", error);
+            }
+        });
+        
+    })();
+  </script>
+</body>
+</html>

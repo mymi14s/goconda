@@ -13,10 +13,10 @@ type User struct {
 	PasswordHash string    `orm:"size(255)" json:"-"`
 	CreatedAt    time.Time `orm:"auto_now_add;type(datetime)" json:"created_at"`
 	UpdatedAt    time.Time `orm:"auto_now;type(datetime)" json:"updated_at"`
-	IsSuperuser bool      `orm:"default(false)" json:"is_superuser"`
+	IsSuperuser  bool      `orm:"default(false)" json:"is_superuser"`
 }
 
-func (u *User) TableName() string { return "users" }
+func (u *User) TableName() string { return "user" }
 
 func GetUserByEmail(email string) (*User, error) {
 	o := orm.NewOrm()

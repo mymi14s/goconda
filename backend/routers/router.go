@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/beego/beego/v2/server/web"
 
+	frontend "github.com/mymi14s/goconda/apps/frontend/controllers"
 	items "github.com/mymi14s/goconda/apps/items/controllers"
 	"github.com/mymi14s/goconda/controllers"
 	"github.com/mymi14s/goconda/middleware"
@@ -10,12 +11,19 @@ import (
 
 func init() {
 
+	// Bridge cookie -> Authorization for BFF sessions
+	middleware.SetupCookieAuthBridge()
+
 	middleware.ProtectMany(
 		"/api/v1/users/me",
 		"/api/v1/items",
 		"/api/v1/items/*", // covers /items/:id paths
 		"/api/v1/upload",
 	)
+
+	web.Router("/", &frontend.FrontendController{}, "get:Index")
+	web.Router("/frontend/api/get-info", &frontend.FrontendController{}, "get:GetInfo")
+	web.Router("/frontend/api/contact-form", &frontend.FrontendController{}, "post:ContactForm")
 
 	ns := web.NewNamespace("/api/v1",
 		web.NSNamespace("/auth",

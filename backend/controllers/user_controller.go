@@ -8,7 +8,6 @@ type UserController struct {
 
 func (c *UserController) Me() {
 
-	fmt.Println("hello world\npero")
 	u, err := c.GetCurrentUser()
 	fmt.Println(u)
 	if err != nil || u == nil {

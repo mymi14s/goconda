@@ -13,7 +13,7 @@ type RevokedToken struct {
 	CreatedAt time.Time `orm:"auto_now_add;type(datetime)" json:"created_at"`
 }
 
-func (r *RevokedToken) TableName() string { return "revoked_tokens" }
+func (r *RevokedToken) TableName() string { return "revoked_token" }
 
 func RevokeToken(jti string, exp time.Time) error {
 	if jti == "" {

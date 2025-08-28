@@ -17,7 +17,7 @@ type PasswordResetToken struct {
 	CreatedAt time.Time  `orm:"auto_now_add;type(datetime)" json:"created_at"`
 }
 
-func (t *PasswordResetToken) TableName() string { return "password_reset_tokens" }
+func (t *PasswordResetToken) TableName() string { return "password_reset_token" }
 
 func randomResetToken(n int) (string, error) {
 	b := make([]byte, n)
