@@ -5,10 +5,12 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/server/web"
 	"github.com/beego/beego/v2/server/web/filter/cors"
+	"github.com/go-co-op/gocron"
 
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/mattn/go-sqlite3"
@@ -16,6 +18,8 @@ import (
 	"github.com/mymi14s/goconda/models"
 	_ "github.com/mymi14s/goconda/routers"
 	"github.com/mymi14s/goconda/utils/hash"
+
+	frontend "github.com/mymi14s/goconda/apps/frontend/controllers"
 )
 
 func mustLoadConfig() {
@@ -109,5 +113,9 @@ func main() {
 	web.BConfig.Listen.HTTPPort = port
 	web.SetStaticPath("/static", "static")
 
+	s := gocron.NewScheduler(time.UTC)
+	_, _ = s.Every(1).Hour().Do(frontend.NHSCrawler)
+	_, _ = s.Every(1).Day().Do(frontend.DeleteExpiredNHSJobs)
+	s.StartAsync()
 	web.Run()
 }

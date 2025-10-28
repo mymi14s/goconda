@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NHS UK Job Search</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nhs: {
+                            blue: '#005EB8',
+                            lightblue: '#41B6E6',
+                            green: '#007F5F',
+                            red: '#DA291C',
+                            grey: '#4C6272',
+                            lightgrey: '#F0F4F5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        .job-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .nhs-badge {
+            background-color: #e6f4f1;
+            color: #007F5F;
+        }
+        .pagination-item {
+            transition: all 0.2s ease;
+        }
+        .pagination-item:hover:not(.disabled) {
+            background-color: #e2e8f0;
+        }
+        .active-page {
+            background-color: #005EB8;
+            color: white;
+        }
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 94, 184, 0.3);
+        }
+        .mobile-search {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .desktop-search {
+                display: none;
+            }
+            .mobile-search {
+                display: block;
+            }
+            .job-date-info {
+                position: absolute;
+                bottom: 10px;
+                left: 10px;
+                width: auto;
+                text-align: left;
+                background: none;
+                padding: 0;
+                margin: 0;
+            }
+            .job-date-info .flex {
+                justify-content: flex-start;
+            }
+            .job-date-info .text-sm {
+                font-size: 0.75rem;
+            }
+            .job-actions {
+                position: absolute;
+                bottom: 10px;
+                right: 10px;
+                display: flex;
+                align-items: center;
+            }
+            .job-card {
+                position: relative;
+                padding-bottom: 60px; /* Add extra space for date info */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="app">
+        <!-- Header -->
+        <header class="bg-nhs-blue text-white shadow-md">
+            <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="bg-white p-1 rounded mr-3">
+                        <i class="fas fa-heartbeat text-nhs-red text-2xl"></i>
+                    </div>
+                    <h1 class="text-xl md:text-2xl font-bold">NHS UK Jobs</h1>
+                </div>
+                <div class="flex items-center">
+                    <button @click="toggleFilters" class="md:hidden bg-nhs-lightblue hover:bg-blue-700 text-white p-2 rounded-full">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                    <div class="hidden md:flex items-center ml-4">
+                        <i class="fas fa-search mr-2"></i>
+                        <span>Search NHS Jobs</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-6">
+            <!-- Search Filters - Desktop -->
+            <div class="desktop-search bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Job Title</label>
+                        <input 
+                            v-model="filters.Title" 
+                            type="text" 
+                            placeholder="e.g. Nurse, Doctor"
+                            class="search-input w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Employer</label>
+                        <input 
+                            v-model="filters.Employer" 
+                            type="text" 
+                            placeholder="Trust, Company"
+                            class="search-input w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Location</label>
+                        <input 
+                            v-model="filters.Location" 
+                            type="text" 
+                            placeholder="e.g. London, Manchester"
+                            class="search-input w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Closing Date</label>
+                        <input 
+                            v-model="filters.CloseDate" 
+                            type="Date" 
+                            class="search-input w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Job Type</label>
+                        <select 
+                            v-model="filters.Type" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                            <option value="">All Types</option>
+                            <option value="Full-time">Full Time</option>
+                            <option value="Part-time">Part Time</option>
+                            <option value="Permanent">Fixed-Term</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Temporary">Temporary</option>
+                            <option value="Permanent">Permanent</option>
+                            <option value="Bank">Bank</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex items-center mb-4 md:mb-0">
+                        <span class="mr-4 text-gray-700">Date Posted:</span>
+                        <div class="flex space-x-2">
+                            <button 
+                                @click="setDateFilter('any')"
+                                :class="{'bg-nhs-blue text-white': filters.postDate === 'any'}"
+                                class="px-3 py-1 text-sm rounded border border-gray-300"
+                            >
+                                Any time
+                            </button>
+                            <button 
+                                @click="setDateFilter('today')"
+                                :class="{'bg-nhs-blue text-white': filters.postDate === 'today'}"
+                                class="px-3 py-1 text-sm rounded border border-gray-300"
+                            >
+                                Today
+                            </button>
+                            <button 
+                                @click="setDateFilter('week')"
+                                :class="{'bg-nhs-blue text-white': filters.postDate === 'week'}"
+                                class="px-3 py-1 text-sm rounded border border-gray-300"
+                            >
+                                Last 7 days
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button 
+                        @click="searchJobs" 
+                        class="bg-nhs-blue hover:bg-blue-700 text-white px-6 py-2 rounded-md flex items-center"
+                    >
+                        <i class="fas fa-search mr-2"></i> Search Jobs
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Filters - Mobile -->
+            <div v-if="showMobileFilters" class="mobile-search bg-white rounded-lg shadow-md p-4 mb-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Job Title</label>
+                        <input 
+                            v-model="filters.Title" 
+                            type="text" 
+                            placeholder="e.g. Nurse, Doctor"
+                            class="search-input w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Employer</label>
+                        <input 
+                            v-model="filters.Employer" 
+                            type="text" 
+                            placeholder="e.g. Trust, Company"
+                            class="search-input w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Location</label>
+                        <input 
+                            v-model="filters.Location" 
+                            type="text" 
+                            placeholder="e.g. London, Manchester"
+                            class="search-input w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Closing Date</label>
+                        <input 
+                            v-model="filters.CloseDate" 
+                            type="Date"
+                            class="search-input w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Job Type</label>
+                        <select 
+                            v-model="filters.Type" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nhs-blue"
+                        >
+                            <option value="">All Types</option>
+                            <option value="Full-time">Full Time</option>
+                            <option value="Part-time">Part Time</option>
+                            <option value="Permanent">Fixed-Term</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Temporary">Temporary</option>
+                            <option value="Permanent">Permanent</option>
+                            <option value="Bank">Bank</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-medium mb-1">Date Posted</label>
+                        <div class="flex space-x-2">
+                            <button 
+                                @click="setDateFilter('any')"
+                                :class="{'bg-nhs-blue text-white': filters.postDate === 'any'}"
+                                class="px-3 py-1 text-sm rounded border border-gray-300"
+                            >
+                                Any time
+                            </button>
+                            <button 
+                                @click="setDateFilter('today')"
+                                :class="{'bg-nhs-blue text-white': filters.postDate === 'today'}"
+                                class="px-3 py-1 text-sm rounded border border-gray-300"
+                            >
+                                Today
+                            </button>
+                            <button 
+                                @click="setDateFilter('week')"
+                                :class="{'bg-nhs-blue text-white': filters.postDate === 'week'}"
+                                class="px-3 py-1 text-sm rounded border border-gray-300"
+                            >
+                                Last 7 days
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-center">
+                    <button 
+                        @click="searchJobs" 
+                        class="bg-nhs-blue hover:bg-blue-700 text-white px-6 py-2 rounded-md w-full"
+                    >
+                        Search Jobs
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">[[ results.length ]] Jobs Found</h2>
+                    <div class="text-sm text-gray-600">
+                        Showing [[ startIndex ]] - [[ startIndex + 9 > totalResults ? totalResults : startIndex + 9 ]] of [[ totalResults ]]
+                    </div>
+                </div>
+
+                <!-- Job Listings -->
+                <div v-if="results.length > 0">
+                    <div 
+                        v-for="(job, index) in paginatedResults" 
+                        :key="index"
+                        class="job-card bg-white rounded-lg p-5 mb-4"
+                    >
+                        <div class="flex flex-col md:flex-row md:justify-between">
+                <div class="mb-4 md:mb-0 md:flex-1 md:pr-4">
+                    <div class="flex items-center">
+                        <h3 class="text-lg font-bold text-gray-900">[[ job.title ]]</h3>
+                        <span v-if="isNew(job.postDate)" class="ml-2 nhs-badge px-2 py-1 rounded text-xs font-semibold">New</span>
+                    </div>
+                    <p class="text-gray-600 mt-1">[[ job.description ]]</p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-sm">[[ job.employer ]]</span>
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">[[ job.type ]]</span>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">[[ job.location ]]</span>
+                        <span v-if="job.salary" class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-sm">[[ job.salary ]]</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop View - Prevent folding -->
+                <div class="hidden md:block text-right flex-shrink-0 w-auto min-w-[180px]">
+                    <div class="text-sm text-gray-600">
+                        <div class="flex items-center justify-end mb-1 whitespace-nowrap">
+                            <i class="fas fa-calendar-day mr-1 text-gray-500"></i>
+                            Posted: [[ formatDate(job.postDate) ]]
+                        </div>
+                        <div class="flex items-center justify-end whitespace-nowrap">
+                            <i class="fas fa-hourglass-end mr-1 text-gray-500"></i>
+                            Closes: [[ formatDate(job.closeDate) ]]
+                        </div>
+                    </div>
+                    <a :href="'https://www.jobs.nhs.uk/candidate/jobadvert/'+job.reference" target="_blank" class="mt-3 bg-nhs-blue hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm w-full inline-block text-center">
+                        View Details
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Mobile View - Full width section below main content -->
+            <div class="md:hidden mt-4 pt-4 border-t border-gray-200">
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        <div class="flex items-center mb-1">
+                            <i class="fas fa-calendar-day mr-1 text-gray-500"></i>
+                            Posted: [[ formatDate(job.postDate) ]]
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-hourglass-end mr-1 text-gray-500"></i>
+                            Closes: [[ formatDate(job.closeDate) ]]
+                        </div>
+                    </div>
+                    <a :href="'https://www.jobs.nhs.uk/candidate/jobadvert/'+job.reference" target="_blank" class="bg-nhs-blue hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm inline-block text-center">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Results -->
+    <div v-else class="bg-white rounded-lg p-8 text-center">
+        <i class="fas fa-search text-5xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">No jobs found</h3>
+        <p class="text-gray-600">Try adjusting your search criteria</p>
+    </div>
+
+    <!-- Pagination -->
+    <div v-if="totalResults > 0" class="mt-8 flex justify-center">
+        <nav class="flex items-center space-x-2">
+            <!-- First Page (<<) -->
+            <button 
+                @click="getNextPageResult(1)"
+                :disabled="currentPage === 1"
+                class="pagination-item disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 rounded-md"
+                aria-label="First page"
+            >
+                <i class="fas fa-angle-double-left"></i>
+            </button>
+            
+            <!-- Previous Page (<) -->
+            <button 
+                @click="getNextPageResult(Math.max(1, currentPage - 1))"
+                :disabled="currentPage === 1"
+                class="pagination-item disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 rounded-md"
+                aria-label="Previous page"
+            >
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <!-- Current Page Number -->
+            <span class="px-3 py-2 bg-gray-200 text-gray-800 rounded-md font-medium">
+                [[ currentPage ]]
+            </span>
+            
+            <!-- Next Page (>) -->
+            <button 
+                @click="getNextPageResult(Math.min(totalPages, currentPage + 1))"
+                :disabled="currentPage === totalPages"
+                class="pagination-item disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 rounded-md"
+                aria-label="Next page"
+            >
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <!-- Last Page (>>) -->
+            <button 
+                @click="getNextPageResult(totalPages)"
+                :disabled="currentPage === totalPages"
+                class="pagination-item disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 rounded-md"
+                aria-label="Last page"
+            >
+                <i class="fas fa-angle-double-right"></i>
+            </button>
+        </nav>
+    </div>
+</div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-nhs-grey text-white py-8">
+            <div class="container mx-auto px-4">
+                <div class="border-t border-gray-600 mt-8 pt-6 text-center text-sm">
+                    <p>© [[ new Date().getFullYear() ]]</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+<script>
+const { createApp, ref, computed, onMounted } = Vue;
+
+createApp({
+    delimiters: ['[[', ']]'],
+    setup() {
+        // Reactive data
+        const filters = ref({
+            Title: '',
+            Employer: '',
+            Location: '',
+            Type: '',
+            postDate: 'any',
+            PageNumber: 1
+        });
+        
+        const showMobileFilters = ref(false);
+        const currentPage = ref(1);
+        const resultsPerPage = 10;
+        const allJobs = ref([]); 
+        const loading = ref(false); 
+        
+        // Computed properties
+        const results = computed(() => {
+            return allJobs.value;
+        });
+        
+        const totalPages = ref(0);
+        const totalResults = ref(0);
+        
+        const paginatedResults = computed(() => {
+            return allJobs.value;
+        });
+        
+        const startIndex = computed(() => {
+            return (currentPage.value - 1) * resultsPerPage + 1;
+        });
+        
+        const endIndex = computed(() => {
+            return Math.min(currentPage.value * resultsPerPage, totalResults.value);
+        });
+
+        const getNextPageResult = async (page) => {
+            currentPage.value = page;
+            filters.value.PageNumber = page;
+            showMobileFilters.value = false;
+            await fetchJobs();
+        };
+        
+        // Fetch jobs from API with POST request
+        const fetchJobs = async () => {
+            loading.value = true;
+            try {
+                const payload = {
+                    ...filters.value
+                };
+
+                if (filters.value.postDate === 'today') {
+                    const today = new Date().toISOString().split('T')[0];
+                    payload.PostDate = today;
+                } else if (filters.value.postDate === 'week') {
+                    const today = new Date();
+                    const oneWeekAgo = new Date();
+                    oneWeekAgo.setDate(today.getDate() - 7);
+                    payload.PostDate = oneWeekAgo.toISOString().split('T')[0];
+                }
+
+                const response = await fetch('/nhs/jobs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                totalResults.value = data.data?.total || 0;
+                totalPages.value = Math.ceil(totalResults.value / resultsPerPage);
+                
+                allJobs.value = Array.isArray(data.data?.data) ? [...data.data.data] : [];
+                
+            } catch (error) {
+                allJobs.value = [];
+                totalResults.value = 0;
+                totalPages.value = 0;
+            } finally {
+                loading.value = false;
+            }
+        };
+        
+        const toggleFilters = () => {
+            showMobileFilters.value = !showMobileFilters.value;
+        };
+        
+        const setDateFilter = (date) => {
+            filters.value.postDate = date;
+        };
+        
+        const searchJobs = () => {
+            currentPage.value = 1;
+            filters.value.PageNumber = 1;
+            showMobileFilters.value = false;
+            fetchJobs();
+        };
+        
+        const formatDate = (dateString) => {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-GB', { 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric' 
+            });
+        };
+        
+        const isNew = (dateString) => {
+            const today = new Date();
+            const postDate = new Date(dateString);
+            const diffTime = Math.abs(today - postDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays <= 3;
+        };
+        
+        onMounted(() => {
+            fetchJobs();
+        });
+        
+        return {
+            filters,
+            showMobileFilters,
+            currentPage,
+            results,
+            totalPages,
+            paginatedResults,
+            startIndex,
+            endIndex,
+            totalResults,
+            toggleFilters,
+            setDateFilter,
+            searchJobs,
+            formatDate,
+            isNew,
+            getNextPageResult,
+            loading
+        };
+    }
+}).mount('#app');
+</script>
+</body>
+</html>

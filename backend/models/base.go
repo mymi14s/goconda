@@ -78,6 +78,7 @@ func InitDB() error {
 		new(Permission),
 		new(PasswordResetToken),
 		new(ErrorLog),
+		new(NHSJob),
 	)
 	return nil
 }

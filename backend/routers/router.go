@@ -24,6 +24,8 @@ func init() {
 	web.Router("/", &frontend.FrontendController{}, "get:Index")
 	web.Router("/frontend/api/get-info", &frontend.FrontendController{}, "get:GetInfo")
 	web.Router("/frontend/api/contact-form", &frontend.FrontendController{}, "post:ContactForm")
+	web.Router("/nhs", &frontend.NHSController{}, "get:Index")
+	web.Router("/nhs/jobs", &frontend.NHSController{}, "post:GetData")
 
 	ns := web.NewNamespace("/api/v1",
 		web.NSNamespace("/auth",
