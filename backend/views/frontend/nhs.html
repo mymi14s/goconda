@@ -512,6 +512,8 @@ createApp({
                     payload.PostDate = oneWeekAgo.toISOString().split('T')[0];
                 }
 
+                delete payload.postDate;
+
                 const response = await fetch('/nhs/jobs', {
                     method: 'POST',
                     headers: {
