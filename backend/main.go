@@ -102,7 +102,6 @@ func main() {
 	appname := web.AppConfig.DefaultString("appname", "goconda")
 	log.Printf("%s starting on :%d", appname, port)
 	web.InsertFilter("*", web.BeforeRouter, cors.Allow(&cors.Options{
-		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length", "Content-Type"},
