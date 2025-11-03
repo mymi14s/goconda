@@ -124,7 +124,7 @@ func GetNHSJobs(search NHSJobSearch) ([]models.NHSJob, int64, error) {
 	if search.Title == "" && search.Description == "" && search.Employer == "" &&
 		search.Type == "" && search.Location == "" && search.PostDate == "" && search.CloseDate == "" {
 		// No filters: get last 10
-		_, err = qs.Limit(10).All(&jobs)
+		_, err = qs.Limit(10, 0).All(&jobs)
 		total = int64(len(jobs))
 	} else {
 		// Pagination
