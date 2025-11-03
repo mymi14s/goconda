@@ -310,9 +310,9 @@
             <!-- Results Section -->
             <div class="mb-6">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold text-gray-800">[[ results.length ]] Jobs Found</h2>
+                    <h2 class="text-xl font-bold text-gray-800">[[ totalResults ]] Jobs Found</h2>
                     <div class="text-sm text-gray-600">
-                        Showing [[ startIndex ]] - [[ startIndex + 9 > totalResults ? totalResults : startIndex + 9 ]] of [[ totalResults ]]
+                        Showing [[ totalResults>0 ? startIndex: 0 ]] - [[ startIndex + 9 > totalResults ? totalResults : startIndex + 9 ]] of [[ totalResults ]]
                     </div>
                 </div>
 
