@@ -121,26 +121,19 @@ func GetNHSJobs(search NHSJobSearch) ([]models.NHSJob, int64, error) {
 	var total int64
 	var err error
 
-	if search.Title == "" && search.Description == "" && search.Employer == "" &&
-		search.Type == "" && search.Location == "" && search.PostDate == "" && search.CloseDate == "" {
-		// No filters: get last 10
-		_, err = qs.Limit(10, 0).All(&jobs)
-		total = int64(len(jobs))
-	} else {
-		// Pagination
-		if search.PageNumber < 1 {
-			search.PageNumber = 1
-		}
-		if search.PageSize < 1 {
-			search.PageSize = 10
-		}
-		offset := (search.PageNumber - 1) * search.PageSize
-		total, err = qs.Count()
-		if err != nil {
-			return nil, 0, err
-		}
-		_, err = qs.Limit(search.PageSize, offset).All(&jobs)
+	if search.PageNumber < 1 {
+		search.PageNumber = 1
 	}
+	if search.PageSize < 1 {
+		search.PageSize = 10
+	}
+
+	offset := (search.PageNumber - 1) * search.PageSize
+	total, err = qs.Count()
+	if err != nil {
+		return nil, 0, err
+	}
+	_, err = qs.Limit(search.PageSize, offset).All(&jobs)
 
 	return jobs, total, err
 }
