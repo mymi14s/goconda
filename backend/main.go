@@ -19,7 +19,7 @@ import (
 	_ "github.com/mymi14s/goconda/routers"
 	"github.com/mymi14s/goconda/utils/hash"
 
-	frontend "github.com/mymi14s/goconda/apps/frontend/controllers"
+	//frontend "github.com/mymi14s/goconda/apps/frontend/controllers"
 )
 
 func mustLoadConfig() {
