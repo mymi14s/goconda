@@ -113,8 +113,8 @@ func main() {
 	web.SetStaticPath("/static", "static")
 
 	s := gocron.NewScheduler(time.UTC)
-	_, _ = s.Every(1).Hour().Do(frontend.NHSCrawler)
-	_, _ = s.Every(1).Day().Do(frontend.DeleteExpiredNHSJobs)
+	//_, _ = s.Every(1).Hour().Do(frontend.NHSCrawler)
+	//_, _ = s.Every(1).Day().Do(frontend.DeleteExpiredNHSJobs)
 	s.StartAsync()
 	web.Run()
 }
